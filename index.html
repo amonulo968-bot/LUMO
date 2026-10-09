@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>LUMO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app" id="app">
+
+  <section class="screen active has-fab" id="notes">
+    <div class="list" id="notesList"></div>
+    <div class="hd">
+      <div class="nh">
+        <div><h1 class="big" data-i18n="myNotes"></h1><p class="meta" id="notesMeta"></p></div>
+        <button class="icon-btn more" id="moreBtn" aria-label="More"><svg class="i"><use href="#dots"/></svg></button>
+        <div class="menu" id="moreMenu">
+          <button id="exportBtn" data-i18n="export"></button>
+          <button id="importBtn" data-i18n="import"></button>
+        </div>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </div>
+      <div class="search"><input id="homeSearch" type="search" data-i18n-ph="searchPh" autocomplete="off"><button class="sortbtn" id="sortBtn" aria-label="Sort"><svg class="i"><use href="#sort"/></svg></button><div class="menu" id="sortMenu"></div></div>
+    </div>
+    <button class="primary fab" id="newNote"><svg class="i"><use href="#plus"/></svg><span data-i18n="newNote"></span></button>
+  </section>
+
+  <section class="screen has-fab" id="tasks">
+    <div class="list" id="tasksList"></div>
+    <div class="hd"><h1 data-i18n="tasks"></h1><p class="meta" id="tasksMeta"></p></div>
+    <button class="primary fab" id="addTask"><svg class="i"><use href="#plus"/></svg><span data-i18n="addTask"></span></button>
+  </section>
+
+  <section class="screen" id="settings">
+    <div class="list">
+      <div class="card row"><span data-i18n="theme"></span>
+        <div class="seg" id="segTheme"><button data-v="light" data-i18n="light"></button><button data-v="dark" data-i18n="dark"></button></div></div>
+      <div class="card row"><span data-i18n="language"></span>
+        <div class="seg" id="segLang"><button data-v="ru">Русский</button><button data-v="en">English</button></div></div>
+      <div class="card row" id="vibRow"><span class="vl"><span data-i18n="vibration"></span><svg class="i chev-r"><use href="#chevron"/></svg></span><input type="checkbox" class="switch" id="setVib"></div>
+      <label class="card row"><span data-i18n="animations"></span><input type="checkbox" class="switch" id="setAnim"></label>
+      <button class="card row" id="openTrash"><span data-i18n="trash"></span><span class="rv" id="trashCount"></span></button>
+      <div class="card row"><span data-i18n="accent"></span>
+        <div class="swatches" id="swatches">
+          <button data-v="violet" style="--c:#4F3EE0" aria-label="Violet"></button>
+          <button data-v="blue" style="--c:#2F6BFF" aria-label="Blue"></button>
+          <button data-v="green" style="--c:#12A66A" aria-label="Green"></button>
+          <button data-v="orange" style="--c:#E8610A" aria-label="Orange"></button>
+          <button data-v="pink" style="--c:#E13C8C" aria-label="Pink"></button>
+        </div></div>
+      <button class="card row" id="aboutRow"><span data-i18n="about"></span><svg class="i chev-r"><use href="#chevron"/></svg></button>
+      <button class="card row danger" id="resetData" data-i18n="reset"></button>
+    </div>
+    <div class="hd"><h1 data-i18n="settings"></h1></div>
+  </section>
+
+  <section class="screen has-fab" id="trash">
+    <div class="list" id="trashList"></div>
+    <div class="hd">
+      <div class="theader">
+        <button class="icon-btn" id="trashBack" aria-label="Back"><svg class="i"><use href="#chevron"/></svg></button>
+        <h1 data-i18n="trash"></h1>
+      </div>
+      <p class="meta tmeta" data-i18n="trashNote"></p>
+    </div>
+    <button class="textbtn fab" id="emptyTrash" data-i18n="emptyTrash"></button>
+  </section>
+
+  <section class="screen board" id="boards">
+    <div class="bview" id="bView">
+      <div class="bgrid" id="bGrid"></div>
+      <div class="bworld" id="bWorld">
+        <div class="bitems" id="bItems"></div>
+        <svg class="barrows" id="bArrows" width="1" height="1">
+          <defs>
+            <marker id="bAh" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M1 1.2 9.2 5 1 8.8z" class="mk"/></marker>
+            <marker id="bAhS" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M1 1.2 9.2 5 1 8.8z" class="mk sel"/></marker>
+          </defs>
+          <g id="bArrowG"></g>
+        </svg>
+      </div>
+      <div class="bempty" id="bEmpty"><b data-i18n="emptyBoardT"></b><span data-i18n="emptyBoardS"></span></div>
+      <div class="bsel" id="bSel" hidden>
+        <div class="sbox" id="sBox"></div>
+        <div class="srs" id="sRs"></div>
+        <div class="sbar" id="sBar">
+          <button class="gr" id="sGrip" aria-label="Move"><svg class="i"><use href="#grip"/></svg></button>
+          <button class="ar" id="sArrow" aria-label="Arrow"><svg class="i"><use href="#t-arrow"/></svg></button>
+          <button class="dl" id="sDel" aria-label="Delete"><svg class="i"><use href="#bin"/></svg></button>
+        </div>
+      </div>
+      <div class="bhint" id="bHint" hidden><span id="bHintTxt"></span><button id="bHintX" aria-label="Cancel"><svg class="i"><use href="#x"/></svg></button></div>
+    </div>
+    <div class="bhd">
+      <span class="bt" data-i18n="boardTitle"></span>
+      <button class="bz" id="bZoom" aria-label="Zoom">100%</button>
+      <span class="bsp"></span>
+      <button class="icon-btn" id="bUndo" aria-label="Undo" disabled><svg class="i"><use href="#undo"/></svg></button>
+      <button class="icon-btn" id="bRedo" aria-label="Redo" disabled><svg class="i"><use href="#redo"/></svg></button>
+      <button class="icon-btn" id="bFit" aria-label="Fit"><svg class="i"><use href="#fit"/></svg></button>
+    </div>
+  </section>
+
+  <section class="screen editor" id="editor">
+    <div class="ebar">
+      <button class="icon-btn" id="back" aria-label="Back"><svg class="i"><use href="#chevron"/></svg></button>
+      <span id="barTitle"></span>
+      <button class="icon-btn" id="shareBtn" aria-label="Share"><svg class="i"><use href="#share"/></svg></button>
+      <button class="icon-btn" id="menuBtn" aria-label="Delete"><svg class="i"><use href="#bin"/></svg></button>
+    </div>
+    <div class="ebody">
+      <input id="eTitle" class="etitle" data-i18n-ph="titlePh" autocomplete="off">
+      <textarea id="eText" class="etext" data-i18n-ph="textPh"></textarea>
+    </div>
+    <div class="estat" id="estat"></div>
+  </section>
+
+  <div class="sheet" id="vibSheet">
+    <div class="scrim" data-close></div>
+    <div class="panel">
+      <h2 class="sheet-h" data-i18n="vibWhat"></h2>
+      <div class="vlist">
+        <label class="card row"><span data-i18n="vibChecks"></span><input type="checkbox" class="switch" data-vib="checks"></label>
+        <label class="card row"><span data-i18n="vibDel"></span><input type="checkbox" class="switch" data-vib="del"></label>
+        <label class="card row"><span data-i18n="vibSave"></span><input type="checkbox" class="switch" data-vib="save"></label>
+      </div>
+      <button class="primary" id="vibDone" data-i18n="done"></button>
+    </div>
+  </div>
+
+  <div class="sheet" id="aboutSheet">
+    <div class="scrim" data-close></div>
+    <div class="panel">
+      <h2 class="sheet-h" data-i18n="about"></h2>
+      <div class="card" id="aboutList"></div>
+      <button class="primary" data-close data-i18n="done"></button>
+    </div>
+  </div>
+
+  <div class="sheet" id="shareSheet">
+    <div class="scrim" data-close></div>
+    <div class="panel">
+      <h2 class="sheet-h" data-i18n="share"></h2>
+      <canvas id="shareCanvas" class="share-prev"></canvas>
+      <div class="sbtns">
+        <button class="ghost" id="shareText" data-i18n="shareText"></button>
+        <button class="primary" id="shareImg" data-i18n="shareImg"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span id="toastMsg"></span><button id="toastBtn"></button></div>
+  <div class="banner" id="banner" hidden><span id="bannerMsg"></span><button id="bannerX" aria-label="Close"><svg class="i"><use href="#x"/></svg></button></div>
+
+  <div class="tmenu" id="toolMenu">
+    <button data-tool="text"><svg class="i"><use href="#t-text"/></svg><span data-i18n="toolText"></span></button>
+    <button data-tool="check"><svg class="i"><use href="#t-check"/></svg><span data-i18n="toolCheck"></span></button>
+    <button data-tool="image"><svg class="i"><use href="#t-image"/></svg><span data-i18n="toolImage"></span></button>
+    <button data-tool="arrow"><svg class="i"><use href="#t-arrow"/></svg><span data-i18n="toolArrow"></span></button>
+  </div>
+  <input type="file" id="bImgFile" accept="image/*" hidden>
+
+  <nav id="nav">
+    <i class="pill" id="pill"></i>
+    <button data-tab="notes" class="active" aria-label="Home"><svg class="i"><use href="#home"/></svg><span data-i18n="navHome"></span></button>
+    <button data-tab="tasks" aria-label="Checklists"><svg class="i"><use href="#checklist"/></svg><span data-i18n="navLists"></span></button>
+    <button class="plus" id="plusBtn" aria-label="Add"><svg class="i"><use href="#plus"/></svg></button>
+    <button data-tab="boards" aria-label="Boards"><svg class="i"><use href="#board"/></svg><span data-i18n="navBoards"></span></button>
+    <button data-tab="settings" aria-label="Settings"><svg class="i"><use href="#gear"/></svg><span data-i18n="navSettings"></span></button>
+  </nav>
+
+  <section class="screen editor" id="taskEditor">
+    <div class="ebar">
+      <button class="icon-btn" id="tBack" aria-label="Back"><svg class="i"><use href="#chevron"/></svg></button>
+      <span data-i18n="newTask"></span>
+    </div>
+    <div class="ebody">
+      <input id="sTitle" class="etitle" data-i18n-ph="taskPh" autocomplete="off">
+      <ul class="clist" id="sChecks"></ul>
+      <input id="sAdd" class="cadd" data-i18n-ph="checkPh" autocomplete="off">
+    </div>
+    <button class="primary tsave" id="sSave" data-i18n="save"></button>
+  </section>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="home" viewBox="0 0 24 24"><path d="M5 10.5 12 4l7 6.5V20H5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.2 1.2) scale(.9)"/></symbol>
+    <symbol id="chevron" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="chev-d" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="bin" viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="sort" viewBox="0 0 24 24"><path d="M4 7h16M7 12h10M10 17h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.9" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/><circle cx="19" cy="12" r="1.9" fill="currentColor"/></symbol>
+    <symbol id="share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M6 12v7h12v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="checklist" viewBox="0 0 24 24"><path d="m4 6.5 1.5 1.5L8 5.2M4 12.5 5.5 14 8 11.2M4 18.5 5.5 20 8 17.2M11.5 7h8.5M11.5 13h8.5M11.5 19h8.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="board" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="6.8" y="8" width="4.4" height="3.6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="12.8" y="12.4" width="4.4" height="3.6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 11.6v1.6a1 1 0 0 0 1 1h2.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="t-text" viewBox="0 0 24 24"><path d="M5.5 7V5.5h13V7M12 5.5v13M9 18.5h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="t-check" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8.4 12.2 2.5 2.5 4.7-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="t-image" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.6" fill="currentColor"/><path d="m5 17 4.6-4.6 3 3 2.4-2.4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="t-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5M20 9H9.5a5.5 5.5 0 0 0 0 11H13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="fit" viewBox="0 0 24 24"><path d="M4 9V6a2 2 0 0 1 2-2h3M15 4h3a2 2 0 0 1 2 2v3M20 15v3a2 2 0 0 1-2 2h-3M9 20H6a2 2 0 0 1-2-2v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="9" width="6" height="6" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="grip" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="9" cy="7" r="1.5"/><circle cx="15" cy="7" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="17" r="1.5"/><circle cx="15" cy="17" r="1.5"/></g></symbol>
+  </defs>
+</svg>
+<script src="script.js"></script>
+</body>
+</html>

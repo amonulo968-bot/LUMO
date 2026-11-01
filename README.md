@@ -1,3 +1,7 @@
+![Uploading file_000000006a9c82109ff01213728d04b0.png…]()
+
+![Uploading file_0000000094a4821085b7028004b1e5da.png…]()
+
 <img width="1664" height="928" alt="1374a4483-f0d1-404b-aae5-a76d834ceefa" src="https://github.com/user-attachments/assets/53e51b40-4ded-4241-a170-835b3f08fd51" />
 
 ✨ LUMO — пространство для твоих идей
